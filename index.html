@@ -4,18 +4,24 @@
 <meta charset="UTF-8">
 <title>Phả hệ dạng trên–xuống</title>
 <script src="https://balkan.app/js/OrgChart.js"></script>
+<div id="footer"></div>
+<div  style="
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+"id="footer">Nhận dịch Văn bia, Câu đối, Hương ước, Gia phả, Sắc phong ... và các loại tài liệu Hán Nôm<br>Liên hệ: TS Đào Phương Chi, Trưởng phòng Thư Tịch, Viện N.Cứu Hán Nôm - 091200.3233</div>
 <style>
   html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
+    height: 100vh;   /* thay vì 100% */
+    overflow: auto;  /* cho phép cuộn */
   }
 
   #tree {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;   /* mở rộng toàn màn hình hiển thị */
   }
 
   .node-text {
