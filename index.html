@@ -2,26 +2,19 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Phả hệ dạng cây</title>
+<title>Phả hệ dạng trên–xuống</title>
 <script src="https://balkan.app/js/OrgChart.js"></script>
-<div id="footer"></div>
-<div  style="
-  text-align: center;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 24px;
-"id="footer">Nhận dịch Văn bia, Câu đối, Hương ước, Gia phả, Sắc phong ... và các loại tài liệu Hán Nôm<br>Liên hệ: TS Đào Phương Chi, Trưởng phòng Thư Tịch, Viện N.Cứu Hán Nôm - 091200.3233</div>
 <style>
   html, body {
     margin: 0;
     padding: 0;
-    height: 100vh;   /* thay vì 100% */
-    overflow: auto;  /* cho phép cuộn */
+    height: 100vh;
+    overflow: auto;
   }
 
   #tree {
     width: 100vw;
-    height: 100vh;   /* mở rộng toàn màn hình hiển thị */
+    height: 100vh;
   }
 
   .node-text {
@@ -36,234 +29,65 @@
   .name { font-size: 15px; font-weight: normal; color: #fceb07; }
   .vc { font-size: 14px; color: #ffffff; }
 
+  /* Hộp chi tiết (popup) */
   #popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fefefe;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    position: absolute;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid #666;
+    border-radius: 8px;
+    padding: 10px 14px;
+    max-width: 300px;
+    font-size: 14px;
+    line-height: 1.3;
     display: none;
     z-index: 9999;
-    width: 300px;
-  }
-
-  #popup h3 { margin-top: 0; text-align: center; }
-  #popup input {
-    width: 100%;
-    padding: 6px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-
-  #popup button {
-    margin: 5px;
-    padding: 6px 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  #popup .save { background: #4CAF50; color: white; }
-  #popup .add-child { background: #2196F3; color: white; }
-  #popup .delete { background: #f44336; color: white; }
-  #popup .cancel { background: #aaa; color: white; }
-
-  #saveAll {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    padding: 8px 12px;
-    background: #009688;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    z-index: 1000;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
   }
 </style>
 </head>
 <body>
+<style>
+  /* Viền cam bao quanh toàn bộ trang web */
+  html {
+    box-sizing: border-box;
+    padding: 8px; /* khoảng cách từ viền đến nội dung */
+    background: #000; /* nền đen để viền cam hiện rõ hơn trên mọi thiết bị */
+    min-height: 100vh;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    border: 6px solid #ff6a00;     /* màu cam đậm đẹp */
+    /* Hoặc dùng các màu cam khác:
+       #ff9500 (cam sáng)
+       #ff5e00 (cam đỏ)
+       #ff7b00
+       #ffa500 (màu orange chuẩn)
+    */
+    border-radius: 12px; /* bo góc viền cho mềm mại */
+    overflow-x: hidden;
+    background: white; /* màu nền trang web thật sự */
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+<style>
+  .announcement-bar {font-family: 'Lobster', cursive; text-align: center; font-size: 32px; padding: 10px 0; color: #d14b00;}
+</style>
+<div class="announcement-bar"> 🔥 Con cháu gia đình cụ Nguyễn Đình A 🔥 </div>  
 <div id="tree"></div>
+<div id="popup"></div>
+
 <script>
 var nodes = [
-  {
-    "id": 1,
-    "index": "Đời thứ 1",
-    "name": "Nguyễn Đình A: 1844",
-    "VC": "vợ: Đỗ Thị A"
-  },
-  {
-    "id": 2,
-    "pid": 1,
-    "index": "Đời thứ 2",
-    "name": "Nguyễn Đình B: 1882",
-    "VC": "vợ: Đỗ Thị C"
-  },
-  {
-    "id": 3,
-    "pid": 2,
-    "index": "Đời thứ 3",
-    "name": "Nguyễn Đình D: 1912",
-    "VC": "vợ: Nguyễn Thị E"
-  },
-  {
-    "id": 4,
-    "pid": 2,
-    "index": "Đời thứ 3",
-    "name": "Nguyễn Đình G: 1914",
-    "VC": "vợ: Nguyễn Thị H: 1922"
-  },
-  {
-    "id": 7,
-    "pid": 3,
-    "index": "Đời thứ 4",
-    "name": "Nguyễn Đình I: 1940",
-    "VC": "vợ: Nguyễn Thị K"
-  },
-  {
-    "id": 11,
-    "pid": 3,
-    "index": "Đời thứ 4",
-    "name": "Nguyễn Thị L: 1955",
-    "VC": "chồng: Nguyễn Đức M: 1946"
-  },
-  {
-    "id": 33,
-    "pid": 11,
-    "index": "Đời thứ 5",
-    "name": "Nguyễn Minh M: 1981",
-    "VC": "Nguyễn Thị N: 1981"
-  },
-  {
-    "id": 34,
-    "pid": 33,
-    "index": "Đời thứ 6",
-    "name": "Nguyễn Minh O: 2009",
-    "VC": ""
-  },
-  {
-    "id": 35,
-    "pid": 33,
-    "index": "Đời thứ 6",
-    "name": "Nguyễn Minh P: 2014",
-    "VC": ""
-  },
-  {
-    "id": 36,
-    "pid": 11,
-    "index": "Đời thứ 5",
-    "name": "Nguyễn Thị Phương Q: 1989",
-    "VC": "Nguyễn Trọng R: 1982"
-  },
-  {
-    "id": 37,
-    "pid": 36,
-    "index": "Đời thứ 6",
-    "name": "Lê Khánh T: 2016",
-    "VC": ""
-  },
-  {
-    "id": 38,
-    "pid": 36,
-    "index": "Đời thứ 6",
-    "name": "Lê Khánh U: 2019",
-    "VC": ""
-  },
-  {
-    "id": 12,
-    "pid": 4,
-    "index": "Đời thứ 4",
-    "name": "Nguyễn Đình V",
-    "VC": "vợ: Nguyễn Thị X: 1954"
-  },
-  {
-    "id": 13,
-    "pid": 12,
-    "index": "Đời thứ 5",
-    "name": "Nguyễn Đình E5: 1977",
-    "VC": "vợ: Phạm Thị A"
-  },
-  {
-    "id": 14,
-    "pid": 13,
-    "index": "Đời thứ 6",
-    "name": "Nguyễn Đình B: 2004",
-    "VC": ""
-  },
-  {
-    "id": 16,
-    "pid": 12,
-    "index": "Đời thứ 5",
-    "name": "Nguyễn Bảo C: 1986",
-    "VC": "vợ: Nguyễn Thu D: 1988"
-  },
-  {
-    "id": 17,
-    "pid": 16,
-    "index": "Đời thứ 6",
-    "name": "Nguyến Đình E: 2020",
-    "VC": ""
-  },
-  {
-    "id": 18,
-    "pid": 16,
-    "index": "Đời thứ 6",
-    "name": "Nguyễn Thu G: 2025",
-    "VC": ""
-  },
-  {
-    "id": 19,
-    "pid": 4,
-    "index": "Đời thứ 4",
-    "name": "Nguyễn Thị H: 1947",
-    "VC": "chồng: Đào Thái K 1942"
-  },
-  {
-    "id": 20,
-    "pid": 19,
-    "index": "Đời thứ 5",
-    "name": "Đào Phương L: 1972",
-    "VC": "chồng: Lê Quang M 1965"
-  },
-  {
-    "id": 21,
-    "pid": 20,
-    "index": "Đời thứ 6",
-    "name": "Lê Phương N: 2009",
-    "VC": ""
-  },
-  {
-    "id": 22,
-    "pid": 20,
-    "index": "Đời thứ 6",
-    "name": "Lê Phương P: 2011",
-    "VC": ""
-  },
-  {
-    "id": 23,
-    "pid": 19,
-    "index": "Đời thứ 5",
-    "name": "Đào Phương Q: 1980",
-    "VC": "chồng: Hoàng Hữu R 1976"
-  },
-  {
-    "id": 24,
-    "pid": 23,
-    "index": "Đời thứ 6",
-    "name": "Hoàng Ánh S: 2010",
-    "VC": ""
-  },
-  {
-    "id": 25,
-    "pid": 23,
-    "index": "Đời thứ 6",
-    "name": "Hoàng Phương T: 2015",
-    "VC": ""
-  }
+  { id: 1, index: "Đời thứ 1", name: "Nguyễn Đình A: 1844", VC: "Đỗ Thị A", chitiet: "Người sáng lập chi họ, sinh năm 1844, quê Hà Tây." },
+  { id: 2, pid: 1, index: "Đời thứ 2", name: "Nguyễn Đình B: 1882", VC: "Đỗ Thị B", chitiet: "Con trưởng của Nguyễn Đình A, có nhiều đóng góp cho dòng họ." },
+  { id: 3, pid: 2, index: "Đời thứ 3", name: "Nguyễn Đình C: 1912", VC: "Nguyễn Thị C", chitiet: "Công tác trong ngành giáo dục, có ba người con." },
+  { id: 4, pid: 2, index: "Đời thứ 3", name: "Nguyễn Đình D: 1914", VC: "Nguyễn Thị D: 1922", chitiet: "Sinh năm 1914, làm việc tại Hà Nội, có hai người con." },
+  { id: 7, pid: 3, index: "Đời thứ 4", name: "Nguyễn Đình E: 1940", VC: "Nguyễn Thị E", chitiet: "Kỹ sư điện, từng công tác tại nhà máy thủy điện Hòa Bình." },
+  { id: 11, pid: 3, index: "Đời thứ 4", name: "Nguyễn Thị G: 1955", VC: "Nguyễn Đức G: 1946", chitiet: "Sinh năm 1955, hiện sinh sống tại Nam Định." },
+  { id: 12, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br> có hai người con trai." },
+  { id: 19, pid: 4, index: "Đời thứ 4", name: "Nguyễn Thị K: 1947", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." }
 ];
 
 OrgChart.templates.centerAlign = Object.assign({}, OrgChart.templates.ana);
@@ -286,10 +110,31 @@ OrgChart.templates.centerAlign.field_2 =
 var chart = new OrgChart(document.getElementById("tree"), {
   template: "centerAlign",
   enableSearch: true,
-  nodeMouseClick: OrgChart.action.expandCollapse,
+  nodeMouseClick: OrgChart.action.none,
   collapse: { level: 4 },
   nodes: nodes,
   nodeBinding: { field_0: "index", field_1: "name", field_2: "VC" }
+});
+
+const popup = document.getElementById("popup");
+
+// Khi click vào node => hiển thị chi tiết
+chart.on('click', function(sender, args){
+  const node = chart.get(args.node.id);
+  if (node && node.chitiet) {
+    popup.innerHTML = `<b>${node.name}</b><br>${node.chitiet}`;
+    popup.style.display = "block";
+    popup.style.left = (args.event.pageX + 12) + "px";
+    popup.style.top = (args.event.pageY + 12) + "px";
+  }
+  return false; // ngăn chặn mở rộng node
+});
+
+// Khi click ra ngoài thì ẩn popup
+document.addEventListener('click', function(e){
+  if (!e.target.closest('.node') && !e.target.closest('#popup')) {
+    popup.style.display = 'none';
+  }
 });
 </script>
 </body>
