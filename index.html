@@ -13,15 +13,10 @@
     font-family: Arial, sans-serif;
   }
 
-  /* Viền cam bao quanh toàn trang */
-  html {
-    box-sizing: border-box;
-    padding: 8px;
-    background: #000;
-  }
+  /* Viền cam đẹp */
+  html { box-sizing: border-box; padding: 8px; background: #000; }
   body {
     margin: 0;
-    min-height: 100vh;
     border: 6px solid #ff6a00;
     border-radius: 12px;
     background: white;
@@ -30,7 +25,7 @@
 
   #tree {
     width: 100%;
-    height: calc(100vh - 70px); /* trừ đi chiều cao thanh tiêu đề */
+    height: calc(100vh - 70px);
   }
 
   .announcement-bar {
@@ -55,34 +50,27 @@
   .name  { font-size: 15px; font-weight: normal; color: #fceb07; }
   .vc    { font-size: 14px; color: #ffffff; }
 
-  /* POPUP CHI TIẾT – ĐẸP & HOẠT ĐỘNG TỐT TRÊN MOBILE */
+  /* Popup chi tiết */
   #popup {
     position: fixed;
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(255,255,255,0.98);
     border: 2px solid #ff6a00;
     border-radius: 12px;
     padding: 16px;
-    max-width: 320px;
+    max-width: 340px;
     width: 90%;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
     z-index: 9999;
     display: none;
     font-size: 15px;
     line-height: 1.5;
-    pointer-events: none; /* không che mất thao tác chạm bên dưới */
   }
-
-  #popup strong {
-    color: #d14b00;
-    font-size: 17px;
-  }
-
-  /* Nút đóng popup (tùy chọn) */
+  #popup strong { color: #d14b00; font-size: 17px; }
   .close-btn {
     position: absolute;
     top: 6px;
-    right: 10px;
-    font-size: 24px;
+    right: 12px;
+    font-size: 28px;
     cursor: pointer;
     color: #aaa;
   }
@@ -94,6 +82,7 @@
 
 <div class="announcement-bar">Con cháu gia đình cụ Nguyễn Đình A</div>
 <div id="tree"></div>
+
 <div id="popup">
   <span class="close-btn" onclick="document.getElementById('popup').style.display='none'">×</span>
   <div id="popup-content"></div>
@@ -126,10 +115,9 @@ OrgChart.templates.centerAlign.field_2 = '<foreignObject x="5" y="48" width="230
 var chart = new OrgChart(document.getElementById("tree"), {
   template: "centerAlign",
   enableSearch: true,
-  nodeMouseClick: OrgChart.action.none,   // tắt hành vi click mặc định
+  nodeMouseClick: OrgChart.action.none,
   mouseScrool: OrgChart.action.none,
   collapse: { level: 4 },
-  nodes: nodes,
   nodeBinding: {
     field_0: "index",
     field_1: "name",
@@ -137,49 +125,46 @@ var chart = new OrgChart(document.getElementById("tree"), {
   }
 });
 
+/* Load dữ liệu – BẮT BUỘC PHẢI CÓ DÒNG NÀY */
+chart.load(nodes);
+
+/* Popup chi tiết – hoạt động mượt cả PC và Mobile */
 const popup = document.getElementById("popup");
 const popupContent = document.getElementById("popup-content");
 
-// Hàm hiển thị popup (dùng chung cho PC & Mobile)
-function showPopup(node, event) {
-  if (!node.chitiet) return;
+function showPopup(node, ev) {
+  if (!node || !node.chitiet) return;
 
   popupContent.innerHTML = `<strong>${node.name}</strong><hr style="margin:8px 0;border-color:#ff6a00">${node.chitiet}`;
   popup.style.display = "block";
 
-  let x, y;
-
-  if (event.pageX || event.pageY) {
-    x = event.pageX;
-    y = event.pageY;
-  } else if (event.touches && event.touches[0]) {
-    x = event.touches[0].pageX;
-    y = event.touches[0].pageY;
+  let x = 0, y = 0;
+  if (ev.pageX || ev.pageY) {
+    x = ev.pageX;
+    y = ev.pageY;
+  } else if (ev.touches && ev.touches[0]) {
+    x = ev.touches[0].pageX;
+    y = ev.touches[0].pageY;
   } else {
-    {
-    // fallback: giữa màn hình
-    x = window.innerWidth / 2;
-    y = window.innerHeight / 2;
+    x = innerWidth / 2;
+    y = innerHeight / 2;
   }
 
-  // Đảm bảo popup không bị tràn màn hình
-  popup.style.left = Math.min(x + 15, window.innerWidth - popup.offsetWidth - 10) + "px";
-  popup.style.top  = Math.min(y + 15, window.innerHeight - popup.offsetHeight - 10) + "px";
+  popup.style.left = Math.min(x + 15, innerWidth - popup.offsetWidth - 20) + "px";
+  popup.style.top  = Math.min(y + 15, innerHeight - popup.offsetHeight - 20) + "px";
 }
 
-// Click chuột (PC) + Chạm tay (Mobile)
+/* Click trên PC & chạm trên Mobile */
 chart.on('click', function(sender, args) {
   showPopup(args.node, args.event);
   return false;
 });
-
-// Hỗ trợ chạm giữ nhẹ trên mobile (nếu click không bắt được)
 chart.on('touchend', function(sender, args) {
   showPopup(args.node, args.event);
   return false;
 });
 
-// Đóng popup khi chạm/click ra ngoài
+/* Đóng popup khi chạm/click ra ngoài */
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.node') && !e.target.closest('#popup')) {
     popup.style.display = 'none';
