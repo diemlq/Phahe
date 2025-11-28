@@ -30,10 +30,10 @@
   .name { font-size: 15px; font-weight: normal; color: #fceb07; }
   .vc { font-size: 14px; color: #ffffff; }
 
-  /* Hộp chi tiết (popup) */
+  /* Popup chi tiết */
   #popup {
     position: absolute;
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.97);
     border: 1px solid #666;
     border-radius: 8px;
     padding: 10px 14px;
@@ -46,8 +46,8 @@
   }
 </style>
 </head>
-<body>
 
+<body>
 <style>
   html {
     box-sizing: border-box;
@@ -66,7 +66,9 @@
   }
 </style>
 
+<!-- Font Lobster -->
 <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
 <style>
   .announcement-bar {
     font-family: 'Lobster', cursive;
@@ -77,12 +79,13 @@
   }
 </style>
 
-<div class="announcement-bar"> 🔥 Con cháu gia đình cụ Nguyễn Đình A 🔥 </div>
+<div class="announcement-bar">🔥 Con cháu gia đình cụ Nguyễn Đình A 🔥</div>
 
 <div id="tree"></div>
 <div id="popup"></div>
 
 <script>
+/* ===== Dữ liệu node ===== */
 var nodes = [
   { id: 1, index: "Đời thứ 1", name: "Nguyễn Đình A: 1844", VC: "Đỗ Thị A", chitiet: "Người sáng lập chi họ, sinh năm 1844, quê Hà Tây." },
   { id: 2, pid: 1, index: "Đời thứ 2", name: "Nguyễn Đình B: 1882", VC: "Đỗ Thị B", chitiet: "Con trưởng của Nguyễn Đình A, có nhiều đóng góp cho dòng họ." },
@@ -90,10 +93,11 @@ var nodes = [
   { id: 4, pid: 2, index: "Đời thứ 3", name: "Nguyễn Đình D: 1914", VC: "Nguyễn Thị D: 1922", chitiet: "Sinh năm 1914, làm việc tại Hà Nội, có hai người con." },
   { id: 7, pid: 3, index: "Đời thứ 4", name: "Nguyễn Đình E: 1940", VC: "Nguyễn Thị E", chitiet: "Kỹ sư điện, từng công tác tại nhà máy thủy điện Hòa Bình." },
   { id: 11, pid: 3, index: "Đời thứ 4", name: "Nguyễn Thị G: 1955", VC: "Nguyễn Đức G: 1946", chitiet: "Sinh năm 1955, hiện sinh sống tại Nam Định." },
-  { id: 12, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br> có hai người con trai." },
+  { id: 12, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br>có hai người con trai." },
   { id: 19, pid: 4, index: "Đời thứ 4", name: "Nguyễn Thị K: 1947", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." }
 ];
 
+/* ===== Template ===== */
 OrgChart.templates.centerAlign = Object.assign({}, OrgChart.templates.ana);
 OrgChart.templates.centerAlign.size = [240, 70];
 OrgChart.templates.centerAlign.minus =
@@ -111,6 +115,7 @@ OrgChart.templates.centerAlign.field_1 =
 OrgChart.templates.centerAlign.field_2 =
   '<foreignObject x="5" y="48" width="230" height="18"><div class="node-text vc">{val}</div></foreignObject>';
 
+/* ===== Khởi tạo chart ===== */
 var chart = new OrgChart(document.getElementById("tree"), {
   template: "centerAlign",
   enableSearch: true,
@@ -120,9 +125,12 @@ var chart = new OrgChart(document.getElementById("tree"), {
   nodeBinding: { field_0: "index", field_1: "name", field_2: "VC" }
 });
 
+/* ==========================================
+   XỬ LÝ CLICK MOBILE + PC
+   ========================================== */
+
 const popup = document.getElementById("popup");
 
-/* ===== HÀM HIỆN POPUP CHUNG CHO PC + MOBILE ===== */
 function showPopup(node, x, y) {
   popup.innerHTML = `<b>${node.name}</b><br>${node.chitiet}`;
   popup.style.display = "block";
@@ -130,30 +138,31 @@ function showPopup(node, x, y) {
   popup.style.top = (y + 12) + "px";
 }
 
-/* === PC: CLICK === */
-chart.on('click', function (sender, args) {
+/* PC: click */
+chart.on('nodeClick', function(sender, args){
   const node = chart.get(args.node.id);
-  if (node && node.chitiet) {
-    showPopup(node, args.event.pageX, args.event.pageY);
-  }
+  if (!node || !node.chitiet) return false;
+
+  let e = args.event;
+  showPopup(node, e.pageX, e.pageY);
+
   return false;
 });
 
-/* === MOBILE: TOUCH === */
-chart.on('touch', function (sender, args) {
+/* Mobile: tap */
+chart.on('tap', function(sender, args){
   const node = chart.get(args.node.id);
-  if (node && node.chitiet) {
+  if (!node || !node.chitiet) return false;
 
-    let touch = args.event.touches ? args.event.touches[0] : null;
-    let x = touch ? touch.pageX : args.event.pageX;
-    let y = touch ? touch.pageY : args.event.pageY;
+  let e = args.event;
+  let touch = e.touches?.[0] || e.changedTouches?.[0] || e;
 
-    showPopup(node, x, y);
-  }
+  showPopup(node, touch.pageX, touch.pageY);
+
   return false;
 });
 
-/* === ẨN POPUP === */
+/* Ẩn popup khi bấm ra ngoài */
 document.addEventListener('click', function(e){
   if (!e.target.closest('.node') && !e.target.closest('#popup')) {
     popup.style.display = 'none';
