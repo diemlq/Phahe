@@ -2,40 +2,20 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Phả hệ gia đình cụ Nguyễn Đình A</title>
+<title>Phả hệ dạng trên–xuống</title>
 <script src="https://balkan.app/js/OrgChart.js"></script>
+
 <style>
   html, body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-  }
-
-  /* Viền cam đẹp */
-  html { box-sizing: border-box; padding: 8px; background: #000; }
-  body {
-    margin: 0;
-    border: 6px solid #ff6a00;
-    border-radius: 12px;
-    background: white;
-    overflow: hidden;
+    overflow: auto;
   }
 
   #tree {
-    width: 100%;
-    height: calc(100vh - 70px);
-  }
-
-  .announcement-bar {
-    font-family: 'Lobster', cursive;
-    text-align: center;
-    font-size: 32px;
-    padding: 12px 0;
-    color: #d14b00;
-    background: #fff8f0;
-    border-bottom: 3px solid #ff6a00;
+    width: 100vw;
+    height: 100vh;
   }
 
   .node-text {
@@ -47,46 +27,60 @@
   }
 
   .index { font-size: 13px; color: #e60000; }
-  .name  { font-size: 15px; font-weight: normal; color: #fceb07; }
-  .vc    { font-size: 14px; color: #ffffff; }
+  .name { font-size: 15px; font-weight: normal; color: #fceb07; }
+  .vc { font-size: 14px; color: #ffffff; }
 
-  /* Popup chi tiết */
+  /* Hộp chi tiết (popup) */
   #popup {
-    position: fixed;
-    background: rgba(255,255,255,0.98);
-    border: 2px solid #ff6a00;
-    border-radius: 12px;
-    padding: 16px;
-    max-width: 340px;
-    width: 90%;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    z-index: 9999;
-    display: none;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-  #popup strong { color: #d14b00; font-size: 17px; }
-  .close-btn {
     position: absolute;
-    top: 6px;
-    right: 12px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #aaa;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid #666;
+    border-radius: 8px;
+    padding: 10px 14px;
+    max-width: 300px;
+    font-size: 14px;
+    line-height: 1.3;
+    display: none;
+    z-index: 9999;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
   }
-  .close-btn:hover { color: #d14b00; }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="announcement-bar">Con cháu gia đình cụ Nguyễn Đình A</div>
-<div id="tree"></div>
+<style>
+  html {
+    box-sizing: border-box;
+    padding: 8px;
+    background: #000;
+    min-height: 100vh;
+  }
 
-<div id="popup">
-  <span class="close-btn" onclick="document.getElementById('popup').style.display='none'">×</span>
-  <div id="popup-content"></div>
-</div>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    border: 6px solid #ff6a00;
+    border-radius: 12px;
+    overflow-x: hidden;
+    background: white;
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+<style>
+  .announcement-bar {
+    font-family: 'Lobster', cursive;
+    text-align: center;
+    font-size: 32px;
+    padding: 10px 0;
+    color: #d14b00;
+  }
+</style>
+
+<div class="announcement-bar"> 🔥 Con cháu gia đình cụ Nguyễn Đình A 🔥 </div>
+
+<div id="tree"></div>
+<div id="popup"></div>
 
 <script>
 var nodes = [
@@ -96,81 +90,71 @@ var nodes = [
   { id: 4, pid: 2, index: "Đời thứ 3", name: "Nguyễn Đình D: 1914", VC: "Nguyễn Thị D: 1922", chitiet: "Sinh năm 1914, làm việc tại Hà Nội, có hai người con." },
   { id: 7, pid: 3, index: "Đời thứ 4", name: "Nguyễn Đình E: 1940", VC: "Nguyễn Thị E", chitiet: "Kỹ sư điện, từng công tác tại nhà máy thủy điện Hòa Bình." },
   { id: 11, pid: 3, index: "Đời thứ 4", name: "Nguyễn Thị G: 1955", VC: "Nguyễn Đức G: 1946", chitiet: "Sinh năm 1955, hiện sinh sống tại Nam Định." },
-  { id: 12, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br>Có hai người con trai." },
-  { id: 19, pid: 4, index: "Đời thứ 4", name: "Nguyễn Thị K: 1947", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>Con trai trưởng là Đỗ Văn L." }
+  { id: 12, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br> có hai người con trai." },
+  { id: 19, pid: 4, index: "Đời thứ 4", name: "Nguyễn Thị K: 1947", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." }
 ];
 
-/* Template node */
 OrgChart.templates.centerAlign = Object.assign({}, OrgChart.templates.ana);
 OrgChart.templates.centerAlign.size = [240, 70];
-OrgChart.templates.centerAlign.minus = '<circle cx="15" cy="15" r="7" fill="#ffffff" stroke="#039BE5" stroke-width="1.2"></circle><path d="M10.5,15 h9" stroke="#039BE5" stroke-width="1.6"></path>';
-OrgChart.templates.centerAlign.plus  = '<circle cx="15" cy="15" r="7" fill="#ffffff" stroke="#039BE5" stroke-width="1.2"></circle><path d="M15,10.5 v9 M10.5,15 h9" stroke="#039BE5" stroke-width="1.6"></path>';
-OrgChart.templates.centerAlign.link  = '<path stroke="#808080" stroke-width="1" fill="none" d="{edge}" />';
+OrgChart.templates.centerAlign.minus =
+  '<circle cx="15" cy="15" r="7" fill="#ffffff" stroke="#039BE5" stroke-width="1.2"></circle>' +
+  '<path d="M10.5,15 h9" stroke="#039BE5" stroke-width="1.6"></path>';
+OrgChart.templates.centerAlign.plus =
+  '<circle cx="15" cy="15" r="7" fill="#ffffff" stroke="#039BE5" stroke-width="1.2"></circle>' +
+  '<path d="M15,10.5 v9 M10.5,15 h9" stroke="#039BE5" stroke-width="1.6"></path>';
+OrgChart.templates.centerAlign.link =
+  '<path stroke="#808080" stroke-width="1" fill="none" d="{edge}" />';
+OrgChart.templates.centerAlign.field_0 =
+  '<foreignObject x="5" y="10" width="230" height="20"><div class="node-text index">{val}</div></foreignObject>';
+OrgChart.templates.centerAlign.field_1 =
+  '<foreignObject x="5" y="28" width="230" height="22"><div class="node-text name">{val}</div></foreignObject>';
+OrgChart.templates.centerAlign.field_2 =
+  '<foreignObject x="5" y="48" width="230" height="18"><div class="node-text vc">{val}</div></foreignObject>';
 
-OrgChart.templates.centerAlign.field_0 = '<foreignObject x="5" y="10" width="230" height="20"><div class="node-text index">{val}</div></foreignObject>';
-OrgChart.templates.centerAlign.field_1 = '<foreignObject x="5" y="28" width="230" height="22"><div class="node-text name">{val}</div></foreignObject>';
-OrgChart.templates.centerAlign.field_2 = '<foreignObject x="5" y="48" width="230" height="18"><div class="node-text vc">{val}</div></foreignObject>';
-
-/* Khởi tạo sơ đồ */
 var chart = new OrgChart(document.getElementById("tree"), {
   template: "centerAlign",
   enableSearch: true,
   nodeMouseClick: OrgChart.action.none,
-  mouseScrool: OrgChart.action.none,
   collapse: { level: 4 },
-  nodeBinding: {
-    field_0: "index",
-    field_1: "name",
-    field_2: "VC"
-  }
+  nodes: nodes,
+  nodeBinding: { field_0: "index", field_1: "name", field_2: "VC" }
 });
 
-/* Load dữ liệu – BẮT BUỘC PHẢI CÓ DÒNG NÀY */
-chart.load(nodes);
-
-/* Popup chi tiết – hoạt động mượt cả PC và Mobile */
 const popup = document.getElementById("popup");
-const popupContent = document.getElementById("popup-content");
 
-function showPopup(node, ev) {
-  if (!node || !node.chitiet) return;
-
-  popupContent.innerHTML = `<strong>${node.name}</strong><hr style="margin:8px 0;border-color:#ff6a00">${node.chitiet}`;
+/* ===== HÀM HIỆN POPUP CHUNG CHO PC + MOBILE ===== */
+function showPopup(node, x, y) {
+  popup.innerHTML = `<b>${node.name}</b><br>${node.chitiet}`;
   popup.style.display = "block";
-
-  let x = 0, y = 0;
-  if (ev.pageX || ev.pageY) {
-    x = ev.pageX;
-    y = ev.pageY;
-  } else if (ev.touches && ev.touches[0]) {
-    x = ev.touches[0].pageX;
-    y = ev.touches[0].pageY;
-  } else {
-    x = innerWidth / 2;
-    y = innerHeight / 2;
-  }
-
-  popup.style.left = Math.min(x + 15, innerWidth - popup.offsetWidth - 20) + "px";
-  popup.style.top  = Math.min(y + 15, innerHeight - popup.offsetHeight - 20) + "px";
+  popup.style.left = (x + 12) + "px";
+  popup.style.top = (y + 12) + "px";
 }
 
-/* Click trên PC & chạm trên Mobile */
-chart.on('click', function(sender, args) {
-  showPopup(args.node, args.event);
-  return false;
-});
-chart.on('touchend', function(sender, args) {
-  showPopup(args.node, args.event);
+/* === PC: CLICK === */
+chart.on('click', function (sender, args) {
+  const node = chart.get(args.node.id);
+  if (node && node.chitiet) {
+    showPopup(node, args.event.pageX, args.event.pageY);
+  }
   return false;
 });
 
-/* Đóng popup khi chạm/click ra ngoài */
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.node') && !e.target.closest('#popup')) {
-    popup.style.display = 'none';
+/* === MOBILE: TOUCH === */
+chart.on('touch', function (sender, args) {
+  const node = chart.get(args.node.id);
+  if (node && node.chitiet) {
+
+    let touch = args.event.touches ? args.event.touches[0] : null;
+    let x = touch ? touch.pageX : args.event.pageX;
+    let y = touch ? touch.pageY : args.event.pageY;
+
+    showPopup(node, x, y);
   }
+  return false;
 });
-document.addEventListener('touchstart', function(e) {
+
+/* === ẨN POPUP === */
+document.addEventListener('click', function(e){
   if (!e.target.closest('.node') && !e.target.closest('#popup')) {
     popup.style.display = 'none';
   }
