@@ -120,6 +120,30 @@
 </head>
 <body>
 
+<!-- HƯỚNG DẪN SỬ DỤNG - HIỂN THỊ KHI MỞ TRANG -->
+<div id="huongdan" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; display:flex; align-items:center; justify-content:center; color:white; font-family:Arial,sans-serif;">
+  <div style="background:#fff; color:#333; padding:25px 30px; border-radius:12px; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.5); position:relative;">
+    <h2 style="text-align:center; color:#d14b00; margin-top:0;">🔥 HƯỚNG DẪN XEM PHẢ HỆ GIA ĐÌNH 🔥</h2>
+    <div style="font-size:16px; line-height:1.7;">
+      <p>👉 <strong>Phóng to/thu nhỏ:</strong> Dùng 2 ngón tay chụm – dang (trên điện thoại) hoặc con lăn chuột (trên máy tính)</p>
+      <p>👉 <strong>Di chuyển bản đồ gia phả:</strong> Kéo bằng 1 ngón tay (điện thoại) hoặc giữ chuột trái kéo (máy tính)</p>
+      <p>👉 <strong>Xem thông tin chi tiết:</strong> <strong>Nhấn vào tên bất kỳ</strong> → sẽ hiện hộp thông tin</p>
+      <p>👉 <strong>Tìm kiếm nhanh:</strong> Gõ tên vào ô tìm kiếm ở góc trên bên trái</p>
+      <p>👉 <strong>Mở rộng/thu gọn nhánh:</strong> Nhấn vào dấu <span style="color:#039BE5; font-weight:bold;">+ </span> hoặc <span style="color:#039BE5; font-weight:bold;">−</span> nhỏ bên dưới mỗi hộp</p>
+      <p>👉 <strong>Chỉ mở riêng 1 nhánh:</strong> Đóng hết các nhánh, nhập tên người nào đó trong nhánh cần mở vào ô tìm kiếm "Search ... type", bấm vào tên người cần tìm sẽ mở riếng nhánh đó</p>
+    </div>
+    <div style="text-align:center; margin-top:20px;">
+      <button onclick="document.getElementById('huongdan').style.display='none'" 
+              style="background:#ff6a00; color:white; border:none; padding:12px 30px; font-size:18px; border-radius:8px; cursor:pointer; font-weight:bold;">
+        ĐÃ HIỂU – XEM PHẢ HỆ
+      </button>
+    </div>
+    <!--small style="display:block; text-align:center; margin-top:15px; color:#666;">
+      (Nhấn lại vào nút này bất kỳ lúc nào nếu muốn xem lại hướng dẫn)
+    </small-->
+  </div>
+</div>
+<!-- HẾT HƯỚNG DẪN SỬ DỤNG -->
 <div class="announcement-bar"> 🔥 Gia đình cụ Nguyễn Đình A 🔥 </div>  
 <div id="tree"></div>
 
@@ -128,12 +152,16 @@
   <div class="close-btn" onclick="document.getElementById('popup').style.display='none'">Đóng X</div>
 </div>
 
-<h5 class="contact-footer">
+<!--h5 class="contact-footer">
     ★ Bổ sung chỉnh sửa, liên hệ 0946.135.789 ★ <br>
     Nhận dịch Văn bia, Câu đối, Gia phả, Sắc phong ... và các loại tài liệu Hán Nôm <br>
     TS Đào Phương Chi, Trưởng phòng Thư tịch, Viện Nghiên cứu Hán Nôm: 0912003233
+</h5-->
+<h5 class="contact-footer" style="font-size:15px !important; line-height:1.65; padding:12px 8px !important;">
+    <strong style="color:#d14b00; font-size:18px;">★ Bổ sung – chỉnh sửa liên hệ: 0946.135.789 ★</strong><br>
+    Nhận dịch Văn bia, Câu đối, Gia phả, Sắc phong và các tài liệu Hán Nôm<br>
+    TS Đào Phương Chi, Trưởng phòng Thư tịch – Viện Nghiên cứu Hán Nôm 091200.3233
 </h5>
-
 <script>
 var nodes = [
   { id: 1, index: "Đời thứ 1", name: "Nguyễn Đình A: 1844", VC: "Đỗ Thị A", chitiet: "Người sáng lập chi họ, sinh năm 1844, quê Hà Tây." },
@@ -142,7 +170,7 @@ var nodes = [
   { id: 4, pid: 2, index: "Đời thứ 3", name: "Nguyễn Đình D: 1914", VC: "Nguyễn Thị D: 1922", chitiet: "Sinh năm 1914, làm việc tại Hà Nội, có hai người con." },
   { id: 5, pid: 3, index: "Đời thứ 4", name: "Nguyễn Đình E: 1940", VC: "Nguyễn Thị E", chitiet: "Kỹ sư điện, từng công tác tại nhà máy thủy điện Hòa Bình." },
   { id: 6, pid: 3, index: "Đời thứ 4", name: "Nguyễn Thị G: 1955", VC: "Nguyễn Đức G: 1946", chitiet: "Sinh năm 1955, hiện sinh sống tại Nam Định." },
-  { id: 7, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br> có hai người con trai." },
+  { id: 7, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H: 1952", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br> có hai người con trai." },
   { id: 8, pid: 4, index: "Đời thứ 4", name: "Nguyễn Thị K: 1947", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." },
   { id: 9, pid: 5, index: "Đời thứ 5", name: "Nguyễn Thị L: 1948", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." },
   { id: 10, pid: 6, index: "Đời thứ 5", name: "Nguyễn Thị M: 1949", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." },
