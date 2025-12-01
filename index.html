@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Phả hệ dạng trên–xuống</title>
+<title>Phả hệ gia đình, dòng họ</title>
 <script src="https://balkan.app/js/OrgChart.js"></script>
 <style>
   html, body {
@@ -11,7 +11,7 @@
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Chặn cuộn trang web chính, chỉ cuộn chart */
+    overflow: hidden; /* Chặn cuộn trang web chính */
     font-family: Arial, sans-serif;
   }
 
@@ -20,6 +20,7 @@
     box-sizing: border-box;
     border: 6px solid #ff6a00;
     background: white;
+    position: relative; /* Để định vị footer */
   }
 
   #tree {
@@ -42,7 +43,7 @@
   /* Hộp chi tiết (popup) chung */
   #popup {
     display: none;
-    position: absolute; /* Mặc định cho PC */
+    position: absolute;
     background: rgba(255,255,255,0.98);
     border: 2px solid #ff6a00;
     border-radius: 8px;
@@ -56,7 +57,6 @@
     color: #333;
   }
 
-  /* Nút đóng popup (chỉ hiện rõ trên mobile hoặc khi cần) */
   .close-btn {
     display: block;
     margin-top: 10px;
@@ -68,31 +68,50 @@
     padding-top: 5px;
   }
 
-  /* CSS riêng cho Điện thoại (Màn hình nhỏ hơn 768px) */
+  /* Footer liên hệ ở dưới đáy */
+  h5.contact-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 8px 0;
+    background: rgba(255, 255, 255, 0.9); /* Nền trắng mờ */
+    color: #333;
+    text-align: center;
+    font-size: 13px;
+    font-weight: normal;
+    border-top: 1px solid #ccc;
+    z-index: 1000; /* Luôn nổi lên trên */
+  }
+
   @media (max-width: 768px) {
     #popup {
-      position: fixed; /* Cố định trên màn hình */
+      position: fixed;
       top: 50% !important;
       left: 50% !important;
-      transform: translate(-50%, -50%); /* Căn giữa tuyệt đối */
-      width: 80%; /* Chiều rộng chiếm 80% màn hình */
+      transform: translate(-50%, -50%);
+      width: 80%;
       max-width: 90%;
     }
-    
-    /* Làm mờ nền khi popup hiện trên mobile (tùy chọn) */
     #popup::before {
       content: '';
       position: fixed;
       top: -1000px; left: -1000px; right: -1000px; bottom: -1000px;
       z-index: -1;
-      /* background: rgba(0,0,0,0.1); */
+    }
+    
+    /* Trên điện thoại, giảm cỡ chữ footer một chút */
+    h5.contact-footer {
+        font-size: 11px;
+        padding: 5px 2px;
     }
   }
 
   .announcement-bar {
     font-family: 'Lobster', cursive; 
     text-align: center; 
-    font-size: 24px; /* Giảm font chữ xíu cho mobile đỡ vỡ */
+    font-size: 24px;
     padding: 10px 0; 
     color: #d14b00;
   }
@@ -109,16 +128,26 @@
   <div class="close-btn" onclick="document.getElementById('popup').style.display='none'">Đóng X</div>
 </div>
 
+<h5 class="contact-footer">
+    ★ Bổ sung chỉnh sửa, liên hệ 0946.135.789 ★ <br>
+    Nhận dịch Văn bia, Câu đối, Gia phả, Sắc phong ... và các loại tài liệu Hán Nôm <br>
+    TS Đào Phương Chi, Trưởng phòng Thư tịch, Viện Nghiên cứu Hán Nôm: 0912003233
+</h5>
+
 <script>
 var nodes = [
   { id: 1, index: "Đời thứ 1", name: "Nguyễn Đình A: 1844", VC: "Đỗ Thị A", chitiet: "Người sáng lập chi họ, sinh năm 1844, quê Hà Tây." },
   { id: 2, pid: 1, index: "Đời thứ 2", name: "Nguyễn Đình B: 1882", VC: "Đỗ Thị B", chitiet: "Con trưởng của Nguyễn Đình A, có nhiều đóng góp cho dòng họ." },
   { id: 3, pid: 2, index: "Đời thứ 3", name: "Nguyễn Đình C: 1912", VC: "Nguyễn Thị C", chitiet: "Công tác trong ngành giáo dục, có ba người con." },
   { id: 4, pid: 2, index: "Đời thứ 3", name: "Nguyễn Đình D: 1914", VC: "Nguyễn Thị D: 1922", chitiet: "Sinh năm 1914, làm việc tại Hà Nội, có hai người con." },
-  { id: 7, pid: 3, index: "Đời thứ 4", name: "Nguyễn Đình E: 1940", VC: "Nguyễn Thị E", chitiet: "Kỹ sư điện, từng công tác tại nhà máy thủy điện Hòa Bình." },
-  { id: 11, pid: 3, index: "Đời thứ 4", name: "Nguyễn Thị G: 1955", VC: "Nguyễn Đức G: 1946", chitiet: "Sinh năm 1955, hiện sinh sống tại Nam Định." },
-  { id: 12, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br> có hai người con trai." },
-  { id: 19, pid: 4, index: "Đời thứ 4", name: "Nguyễn Thị K: 1947", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." }
+  { id: 5, pid: 3, index: "Đời thứ 4", name: "Nguyễn Đình E: 1940", VC: "Nguyễn Thị E", chitiet: "Kỹ sư điện, từng công tác tại nhà máy thủy điện Hòa Bình." },
+  { id: 6, pid: 3, index: "Đời thứ 4", name: "Nguyễn Thị G: 1955", VC: "Nguyễn Đức G: 1946", chitiet: "Sinh năm 1955, hiện sinh sống tại Nam Định." },
+  { id: 7, pid: 4, index: "Đời thứ 4", name: "Nguyễn Đình H", VC: "Nguyễn Thị H: 1954", chitiet: "Giáo viên nghỉ hưu<br> có hai người con trai." },
+  { id: 8, pid: 4, index: "Đời thứ 4", name: "Nguyễn Thị K: 1947", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." },
+  { id: 9, pid: 5, index: "Đời thứ 5", name: "Nguyễn Thị L: 1948", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." },
+  { id: 10, pid: 6, index: "Đời thứ 5", name: "Nguyễn Thị M: 1949", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." },
+  { id: 11, pid: 7, index: "Đời thứ 5", name: "Nguyễn Thị N: 1946", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." },
+  { id: 12, pid: 8, index: "Đời thứ 5", name: "Nguyễn Thị P: 1949", VC: "Đỗ Thái Kh: 1942", chitiet: "Công tác trong ngành y<br>có con trai trưởng là Đỗ Văn L." }
 ];
 
 OrgChart.templates.centerAlign = Object.assign({}, OrgChart.templates.ana);
@@ -141,7 +170,7 @@ OrgChart.templates.centerAlign.field_2 =
 var chart = new OrgChart(document.getElementById("tree"), {
   template: "centerAlign",
   enableSearch: true,
-  nodeMouseClick: OrgChart.action.none, // Quan trọng: Tắt hành động mặc định
+  nodeMouseClick: OrgChart.action.none,
   collapse: { level: 4 },
   nodes: nodes,
   nodeBinding: { field_0: "index", field_1: "name", field_2: "VC" }
@@ -150,50 +179,36 @@ var chart = new OrgChart(document.getElementById("tree"), {
 const popup = document.getElementById("popup");
 const popupContent = document.getElementById("popup-content");
 
-// Xử lý sự kiện CLICK (hoạt động cho cả Click chuột và Chạm tay)
 chart.on('click', function(sender, args){
   const node = chart.get(args.node.id);
-  
   if (node && node.chitiet) {
-    // 1. Điền nội dung
     popupContent.innerHTML = `
       <div style="font-size:16px; font-weight:bold; margin-bottom:5px; color:#d14b00;">${node.name}</div>
       <div style="color:#555;">${node.chitiet}</div>
     `;
-    
     popup.style.display = "block";
 
-    // 2. Xử lý vị trí
-    // Kiểm tra xem đang dùng PC hay Mobile dựa vào chiều rộng màn hình
     if (window.innerWidth <= 768) {
-        // MOBILE: Dùng CSS 'fixed' và 'center' đã định nghĩa trong style @media
-        // Reset các giá trị top/left cũ nếu có
         popup.style.position = "fixed";
         popup.style.top = "50%";
         popup.style.left = "50%";
     } else {
-        // PC: Lấy tọa độ chuột
-        // Lưu ý: args.event trên PC có pageX/Y.
         popup.style.position = "absolute";
         popup.style.top = (args.event.pageY + 15) + "px";
         popup.style.left = (args.event.pageX + 15) + "px";
-        
-        // Logic nhỏ: Nếu popup bị tràn ra ngoài màn hình bên phải thì đẩy sang trái
         if (args.event.pageX + 300 > window.innerWidth) {
              popup.style.left = (args.event.pageX - 315) + "px";
         }
     }
   }
-  return false; // Ngăn chặn hành động mặc định (zoom/expand node)
+  return false;
 });
 
-// Khi click ra ngoài thì ẩn popup
 document.addEventListener('click', function(e){
-  // Nếu click KHÔNG PHẢI vào node VÀ KHÔNG PHẢI vào popup thì ẩn
   if (!e.target.closest('.node') && !e.target.closest('#popup')) {
     popup.style.display = 'none';
   }
-}, true); // Use capture phase để bắt sự kiện tốt hơn trên mobile
+}, true);
 </script>
 </body>
 </html>
